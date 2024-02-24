@@ -3,6 +3,7 @@ on:
   push:
     branches:
     - main
+  workflow_dispatch:
 env:
   DOTNET_CORE_VERSION: 7.0.x
   SONAR_HOST_URL: http://nikxsonar.zapto.org:9000
