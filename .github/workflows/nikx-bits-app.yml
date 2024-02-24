@@ -4,9 +4,7 @@ on:
     branches:
     - main
 env:
-  CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
-  WORKING_DIRECTORY: BITS.DevOps.Service
   SONAR_HOST_URL: http://nikxsonar.zapto.org:9000
   SONAR_TOKEN: sqp_e2915611209113bae2fe69f727d4f651302e97d8
   AZURE_WEBAPP_NAME: nikx-bits-app
@@ -23,9 +21,9 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
     - name: Restore Dotnet Packages
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+      run: dotnet restore
     - name: Build BITS.DevOps.Service
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build --configuration Release
   test:
     runs-on: self-hosted
     needs: build
@@ -38,7 +36,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
       - name: Restore Dotnet Packages
-        run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+        run: dotnet restore
       - name: Test Project
         run: dotnet test BITS.DevOps.Service.Tests/BITS.DevOps.Service.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=json
   sonar_analysis:
@@ -53,7 +51,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
       - name: Restore Dotnet Packages
-        run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+        run: dotnet restore
       - name: Set up JDK 17
         uses: actions/setup-java@v1
         with:
