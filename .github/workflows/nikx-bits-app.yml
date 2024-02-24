@@ -84,7 +84,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp  
   deploy:
     runs-on: self-hosted
-    needs: build
+    needs: publish_artifacts
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
