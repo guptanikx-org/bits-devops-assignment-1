@@ -62,7 +62,7 @@ jobs:
           dotnet build
           dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
           dotnet-sonarscanner end /d:sonar.token="${{ env.SONAR_TOKEN }}"
-  publish_artifacts:
+  deploy:
     runs-on: self-hosted
     needs: sonar_analysis
     steps:
@@ -75,29 +75,13 @@ jobs:
         run: dotnet build --configuration Release
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp  
-  deploy:
-    runs-on: self-hosted
-    needs: publish_artifacts
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: .net-app
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'nikx-bits-app'
           slot-name: 'Production'
-          package: .
+          package: ${{env.DOTNET_ROOT}}/myapp 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_40A3B1C074BC4E53BE998D3088C6FBDA }}
       
     
