@@ -1,0 +1,32 @@
+name: Build and deploy .NET Core application to Web App nikx-bits-app
+on:
+  push:
+    branches:
+    - main
+env:
+  CONFIGURATION: Release
+  DOTNET_CORE_VERSION: 7.0.x
+  WORKING_DIRECTORY: BITS.DevOps.Service
+  SONAR_HOST_URL: http://nikxsonar.zapto.org:9000
+  SONAR_TOKEN: sqp_3fbea7e6217be8384928cd3bc9f69ff946753716
+  AZURE_WEBAPP_NAME: nikx-bits-app
+  AZURE_WEBAPP_PACKAGE_PATH: BITS.DevOps.Service/publish
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+    - name: Restore Dotnet Packages
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+    - name: Install Dotnet Coverage tool
+      run: dotnet tool install --global dotnet-coverage
+    - name: Test Project
+      run: dotnet test BITS.DevOps.Service.Tests/BITS.DevOps.Service.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=html
+    - name: Build Project
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
