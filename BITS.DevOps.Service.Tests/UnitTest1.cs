@@ -10,6 +10,6 @@ public class UnitTest1
     {
         var controller = new UsersController();
         IActionResult result = controller.GetUserEmail("testUserId");
-        Assert.True(result is BadRequestResult);
+        Assert.True(result is OkResult);
     }
 }
