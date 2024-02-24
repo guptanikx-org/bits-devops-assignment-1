@@ -54,6 +54,10 @@ jobs:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
       - name: Restore Dotnet Packages
         run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17          
       - name: Build and analyze
         run: |
           dotnet sonarscanner begin /k:"NikxBitsDevOpsAssignment" /d:sonar.host.url="${{ env.SONAR_HOST_URL }}"  /d:sonar.token="${{ env.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
