@@ -9,7 +9,7 @@ env:
   SONAR_HOST_URL: http://nikxsonar.zapto.org:9000
   SONAR_TOKEN: sqp_e2915611209113bae2fe69f727d4f651302e97d8
   AZURE_WEBAPP_NAME: nikx-bits-app
-  AZURE_WEBAPP_PACKAGE_PATH: BITS.DevOps.Service/publish
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
 jobs:
   build:
     runs-on: self-hosted
@@ -78,14 +78,14 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'nikx-bits-app'
           slot-name: 'Production'
-          package: ${{env.DOTNET_ROOT}}/myapp 
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_67CEE8DAC5FC498482ED3255294CB566 }}
       
     
