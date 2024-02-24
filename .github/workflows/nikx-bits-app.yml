@@ -82,6 +82,6 @@ jobs:
           app-name: 'nikx-bits-app'
           slot-name: 'Production'
           package: ${{env.DOTNET_ROOT}}/myapp 
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_40A3B1C074BC4E53BE998D3088C6FBDA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_67CEE8DAC5FC498482ED3255294CB566 }}
       
     
