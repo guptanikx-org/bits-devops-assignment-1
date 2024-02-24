@@ -38,8 +38,6 @@ jobs:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
       - name: Restore Dotnet Packages
         run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
-      - name: Install Dotnet Coverage tool
-        run: dotnet tool install --global dotnet-coverage
       - name: Test Project
         run: dotnet test BITS.DevOps.Service.Tests/BITS.DevOps.Service.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=html
   
