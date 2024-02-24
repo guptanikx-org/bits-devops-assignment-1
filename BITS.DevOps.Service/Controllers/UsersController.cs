@@ -11,6 +11,7 @@ namespace BITS.DevOps.Service.Controllers
     {
         private readonly string connectionString = "YourConnectionStringHere";
 
+        [HttpGet]
         public IActionResult GetUserDetails(string userId)
         {
             var query = $"SELECT * FROM Users WHERE UserId = '{userId}'";
